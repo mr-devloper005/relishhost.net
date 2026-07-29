@@ -18,13 +18,13 @@ export function EmptyState({
   className,
 }: EmptyStateProps) {
   return (
-    <section className={cn('rounded-[2rem] border border-current/10 bg-current/[0.03] p-8 text-center', className)}>
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-current/10">
-        <SearchX className="h-6 w-6" />
+    <section className={cn('rounded-xl border border-[var(--editable-border)] bg-[var(--editable-page-bg)] p-8 text-center', className)}>
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-neutral-100">
+        <SearchX className="h-5 w-5 text-[var(--editable-muted,#6c6c89)]" />
       </div>
-      <h2 className="mt-5 text-2xl font-semibold tracking-[-0.03em]">{title}</h2>
-      <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-current/65">{description}</p>
-      <Link href={actionHref} className="mt-6 inline-flex items-center gap-2 rounded-full border border-current/15 px-5 py-3 text-sm font-semibold transition hover:bg-current hover:text-background">
+      <h2 className="mt-5 text-xl font-bold tracking-[-0.01em]">{title}</h2>
+      <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[var(--editable-muted,#6c6c89)]">{description}</p>
+      <Link href={actionHref} className="mt-6 inline-flex items-center gap-2 rounded-lg border border-[var(--editable-border)] px-5 py-2.5 text-sm font-semibold transition hover:border-[var(--editable-accent)] hover:text-[var(--editable-accent)]">
         {actionLabel}
         <ArrowRight className="h-4 w-4" />
       </Link>

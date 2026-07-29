@@ -3,55 +3,86 @@
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
-import { globalContent } from '@/editable/content/global.content'
+import { globalContent, isUiHiddenTask } from '@/editable/content/global.content'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
+import { CATEGORY_OPTIONS } from '@/lib/categories'
 
 export function EditableFooter() {
-  const taskLinks = SITE_CONFIG.tasks.filter((task) => task.enabled)
   const year = new Date().getFullYear()
   const { session, logout } = useEditableLocalAuthSession()
+  const categories = CATEGORY_OPTIONS.slice(0, 6)
 
   return (
-    <footer className="border-t border-[var(--editable-border)] bg-[var(--editable-footer-bg)] text-[var(--editable-footer-text)]">
-      <div className="h-[2px] bg-[linear-gradient(90deg,transparent_0%,var(--slot4-accent)_50%,transparent_100%)]" />
-      <div className="mx-auto grid max-w-[var(--editable-container)] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
-        <div>
-          <Link href="/" className="inline-flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center border border-[var(--slot4-accent)]/40 bg-[var(--slot4-surface-bg)]">
-              <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-8 w-8 object-contain" />
-            </span>
-            <span className="editable-display text-xl font-semibold tracking-[0.01em]">{SITE_CONFIG.name}</span>
-          </Link>
-          <p className="mt-4 max-w-md text-sm leading-7 text-[var(--slot4-muted-text)]">{globalContent.footer?.description || SITE_CONFIG.description}</p>
-        </div>
-
-        <div>
-          <h3 className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--slot4-accent)]">Explore</h3>
-          <div className="mt-4 grid gap-2">
-            {taskLinks.map((task) => (
-              <Link key={task.key} href={task.route} className="inline-flex items-center gap-2 text-sm font-medium text-[var(--slot4-muted-text)] transition hover:text-[var(--slot4-page-text)]">
-                {task.label} <ArrowUpRight className="h-3.5 w-3.5" />
+    <footer className="mt-auto bg-[var(--editable-footer-bg)] text-[var(--editable-footer-text)]">
+      <div className="mx-auto max-w-[var(--editable-container)] px-5 sm:px-6 lg:px-8">
+        <div className="border-b border-white/[0.08] py-16 lg:py-20">
+          <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_0.8fr_0.8fr]">
+            <div>
+              <Link href="/" className="inline-flex items-center gap-2.5">
+                <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-10 w-10 object-contain" />
+                <span className="editable-display text-[17px] font-bold">{SITE_CONFIG.name}</span>
               </Link>
-            ))}
+              <p className="mt-5 max-w-sm text-[15px] leading-7 text-white/50">
+                {globalContent.footer?.description || SITE_CONFIG.description}
+              </p>
+              <div className="mt-8 flex gap-3">
+                <Link
+                  href="/sbm"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/[0.08] px-5 py-2.5 text-[13px] font-semibold text-white/80 transition-all duration-200 hover:bg-white/[0.14] hover:text-white"
+                >
+                  Browse collections <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link
+                  href="/create"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] px-5 py-2.5 text-[13px] font-semibold text-white/60 transition-all duration-200 hover:border-white/25 hover:text-white"
+                >
+                  Submit
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">Collections</h3>
+              <div className="mt-5 grid gap-2.5">
+                <Link href="/sbm" className="text-[14px] text-white/55 transition hover:text-white">Browse all</Link>
+                {categories.map((cat) => (
+                  <Link key={cat.slug} href={`/sbm?category=${cat.slug}`} className="text-[14px] text-white/55 transition hover:text-white">{cat.name}</Link>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">Site</h3>
+              <div className="mt-5 grid gap-2.5">
+                <Link href="/about" className="text-[14px] text-white/55 transition hover:text-white">About</Link>
+                <Link href="/contact" className="text-[14px] text-white/55 transition hover:text-white">Contact</Link>
+                <Link href="/search" className="text-[14px] text-white/55 transition hover:text-white">Search</Link>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">Account</h3>
+              <div className="mt-5 grid gap-2.5">
+                {session ? (
+                  <>
+                    <Link href="/create" className="text-[14px] text-white/55 transition hover:text-white">Submit resource</Link>
+                    <button type="button" onClick={logout} className="text-left text-[14px] text-white/55 transition hover:text-white">Logout</button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className="text-[14px] text-white/55 transition hover:text-white">Login</Link>
+                    <Link href="/signup" className="text-[14px] text-white/55 transition hover:text-white">Sign up</Link>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div>
-          <h3 className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--slot4-accent)]">Site</h3>
-          <div className="mt-4 grid gap-2">
-            {[
-              ['About', '/about'],
-              ['Contact', '/contact'],
-              ...(session ? [['Create', '/create']] : [['Login', '/login'], ['Sign up', '/signup']]),
-            ].map(([label, href]) => (
-              <Link key={href} href={href} className="text-sm font-medium text-[var(--slot4-muted-text)] transition hover:text-[var(--slot4-page-text)]">{label}</Link>
-            ))}
-            {session ? <button type="button" onClick={logout} className="text-left text-sm font-medium text-[var(--slot4-muted-text)] transition hover:text-[var(--slot4-page-text)]">Logout</button> : null}
-          </div>
+        <div className="flex flex-col items-center justify-between gap-3 py-6 sm:flex-row">
+          <p className="text-[13px] text-white/30">&copy; {year} {SITE_CONFIG.name}. All rights reserved.</p>
+          
         </div>
-      </div>
-      <div className="border-t border-[var(--editable-border)] px-4 py-5 text-center text-xs font-medium tracking-[0.12em] text-[var(--slot4-muted-text)]">
-        © {year} {SITE_CONFIG.name}. All rights reserved.
       </div>
     </footer>
   )
