@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, Globe2, Layers3, Shield, Sparkles, Users2, Zap } from 'lucide-react'
-import { SITE_CONFIG } from '@/lib/site-config'
 import { pagesContent } from '@/editable/content/pages.content'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 

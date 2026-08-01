@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowUpRight, Bookmark, Building2, Camera, CheckCircle2, Download, ExternalLink, FileText, Globe2, Link2, Lock, Mail, MapPin, Phone, Shield, Sparkles, Star, Tag, UserRound, Verified, Zap } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Bookmark, Building2, Camera, CheckCircle2, Download, ExternalLink, FileText, Globe2, Link2, Lock, Mail, MapPin, Phone, Shield, Sparkles, Tag, UserRound, Verified, Zap } from 'lucide-react'
 import { buildPostMetadata, buildTaskMetadata } from '@/lib/seo'
 import { fetchArticleComments, fetchTaskPostBySlug, fetchTaskPosts } from '@/lib/task-data'
 import { dedupeUrls } from '@/editable/cards/PostCards'
@@ -8,7 +8,7 @@ import { getTaskConfig, SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import type { SitePost } from '@/lib/site-connector'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 import { EditableArticleComments } from '@/editable/components/EditableArticleComments'
-import { getTaskTheme, taskThemeStyle } from '@/editable/theme/task-themes'
+import { taskThemeStyle } from '@/editable/theme/task-themes'
 import { Ads, getSlotSizes } from '@/lib/ads'
 
 export const revalidate = 3
@@ -192,7 +192,7 @@ function ListingDetail({ post, related }: { post: SitePost; related: SitePost[] 
         <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
           {mapSrc ? <MapBox src={mapSrc} label={address || post.title} /> : null}
           <ContactAction website={website} phone={phone} email={email} />
-          <RelatedPanel task="listing" post={post} related={related} />
+          <RelatedPanel task="listing" related={related} />
         </aside>
       </div>
     </section>
@@ -270,7 +270,6 @@ function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[]
   const website = getField(post, ['website', 'url', 'link'])
   const domain = website ? cleanDomain(website) : ''
   const category = categoryOf(post, 'Resource')
-  const tags = Array.isArray(post.tags) ? post.tags.filter(Boolean).slice(0, 8) : []
   const lead = leadText(post)
 
   return (
@@ -333,16 +332,6 @@ function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[]
         <article className="min-w-0">
           <h2 className="editable-display text-xl font-bold">About this resource</h2>
           <BodyContent post={post} />
-          {tags.length ? (
-            <div className="mt-10">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--tk-muted)]">Tags</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-[var(--tk-line)] bg-neutral-50 px-3.5 py-1.5 text-xs font-medium text-[var(--tk-muted)] transition hover:border-[var(--tk-accent)] hover:text-[var(--tk-accent)]">{tag}</span>
-                ))}
-              </div>
-            </div>
-          ) : null}
         </article>
 
         <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
@@ -351,7 +340,6 @@ function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[]
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm"><Globe2 className="h-5 w-5 text-white" /></div>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold text-white">{post.title}</p>
                   {domain ? <p className="text-xs text-white/60">{domain}</p> : null}
                 </div>
               </div>
@@ -445,7 +433,7 @@ function PdfDetail({ post, related }: { post: SitePost; related: SitePost[] }) {
               <Link href={fileUrl} target="_blank" rel="noreferrer" className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--tk-accent)] py-3 text-sm font-semibold text-[var(--tk-on-accent)] transition hover:brightness-90">Download <Download className="h-4 w-4" /></Link>
             </div>
           ) : null}
-          <RelatedPanel task="pdf" post={post} related={related} />
+          <RelatedPanel task="pdf" related={related} />
         </aside>
       </div>
     </section>
@@ -461,7 +449,6 @@ function ProfileDetail({ post }: { post: SitePost }) {
   const email = getField(post, ['email'])
   const phone = getField(post, ['phone', 'telephone', 'mobile'])
   const location = getField(post, ['location', 'city', 'address'])
-  const bio = leadText(post) || stripHtml(summaryText(post))
   const initials = post.title ? post.title.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : '?'
 
   return (
@@ -500,14 +487,14 @@ function ProfileDetail({ post }: { post: SitePost }) {
                 </Link>
               ) : null}
               {email ? (
-                <a href={`mailto:${email}`} className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/70 transition hover:border-white/30 hover:text-white">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/70">
                   <Mail className="h-4 w-4" /> Email
-                </a>
+                </span>
               ) : null}
               {phone ? (
-                <a href={`tel:${phone}`} className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/70 transition hover:border-white/30 hover:text-white">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/70">
                   <Phone className="h-4 w-4" /> Call
-                </a>
+                </span>
               ) : null}
             </div>
           </div>
@@ -548,29 +535,28 @@ function ProfileDetail({ post }: { post: SitePost }) {
             <div className="p-5">
               <div className="space-y-3">
                 {website ? (
-                  <Link href={website} target="_blank" rel="noreferrer" className="group flex items-center gap-3 text-sm text-[var(--tk-muted)] transition hover:text-[var(--tk-accent)]">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 transition group-hover:bg-[var(--tk-accent)]/10">
+                  <div className="flex items-center gap-3 text-sm text-[var(--tk-muted)]">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100">
                       <Globe2 className="h-4 w-4" />
                     </div>
                     <span className="truncate">{cleanDomain(website)}</span>
-                    <ArrowUpRight className="ml-auto h-3.5 w-3.5 opacity-0 transition group-hover:opacity-100" />
-                  </Link>
+                  </div>
                 ) : null}
                 {email ? (
-                  <a href={`mailto:${email}`} className="group flex items-center gap-3 text-sm text-[var(--tk-muted)] transition hover:text-[var(--tk-accent)]">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 transition group-hover:bg-[var(--tk-accent)]/10">
+                  <div className="flex items-center gap-3 text-sm text-[var(--tk-muted)]">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100">
                       <Mail className="h-4 w-4" />
                     </div>
                     <span className="truncate">{email}</span>
-                  </a>
+                  </div>
                 ) : null}
                 {phone ? (
-                  <a href={`tel:${phone}`} className="group flex items-center gap-3 text-sm text-[var(--tk-muted)] transition hover:text-[var(--tk-accent)]">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 transition group-hover:bg-[var(--tk-accent)]/10">
+                  <div className="flex items-center gap-3 text-sm text-[var(--tk-muted)]">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100">
                       <Phone className="h-4 w-4" />
                     </div>
                     <span>{phone}</span>
-                  </a>
+                  </div>
                 ) : null}
                 {location ? (
                   <div className="flex items-center gap-3 text-sm text-[var(--tk-muted)]">
@@ -675,7 +661,7 @@ function BadgeLine({ label, value }: { label: string; value: string }) {
   )
 }
 
-function RelatedPanel({ task, post, related }: { task: TaskKey; post: SitePost; related: SitePost[] }) {
+function RelatedPanel({ task, related }: { task: TaskKey; related: SitePost[] }) {
   const taskConfig = getTaskConfig(task)
   return (
     <div className="space-y-5">
