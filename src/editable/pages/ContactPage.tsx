@@ -1,6 +1,6 @@
 'use client'
 
-import { Building2, FileText, Image as ImageIcon, Mail, MapPin, MessageCircle, Phone, Sparkles, Bookmark, ArrowRight, Clock } from 'lucide-react'
+import { Building2, FileText, Image as ImageIcon, Mail, MapPin, MessageCircle, Phone, Sparkles, Bookmark, Clock } from 'lucide-react'
 import { pagesContent } from '@/editable/content/pages.content'
 import { getFactoryState } from '@/design/factory/get-factory-state'
 import { getProductKind } from '@/design/factory/get-product-kind'
@@ -60,7 +60,7 @@ export default function ContactPage() {
         <section className="mx-auto max-w-[var(--editable-container)] px-6 pb-20 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
             <div className="space-y-4">
-              {lanes.map((lane, i) => (
+              {lanes.map((lane) => (
                 <div key={lane.title} className="group flex gap-4 rounded-2xl border border-neutral-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#f14a1c]/30 hover:shadow-lg sm:p-6">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#f14a1c]/[0.08] text-[#f14a1c] transition-colors duration-300 group-hover:bg-[#f14a1c] group-hover:text-white">
                     <lane.icon className="h-5 w-5" />

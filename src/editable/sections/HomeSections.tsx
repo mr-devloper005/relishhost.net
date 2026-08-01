@@ -1,13 +1,12 @@
 import Link from 'next/link'
 import {
-  ArrowRight, Bookmark, ChevronRight, CheckCircle2, ExternalLink, Globe, Search, Shield, Star, Users, Zap,
+  ArrowRight, Bookmark, ChevronRight, CheckCircle2, Globe, Shield, Users, Zap,
 } from 'lucide-react'
 import type { SitePost } from '@/lib/site-connector'
 import type { HomeTimeSection } from '@/lib/task-data'
 import type { TaskKey } from '@/lib/site-config'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { pagesContent } from '@/editable/content/pages.content'
-import { isUiHiddenTask } from '@/editable/content/global.content'
 import { getEditablePostImage, postHref, toPlainText } from '@/editable/cards/PostCards'
 import { EditableHeroCollage } from '@/editable/sections/EditableHeroCollage'
 
@@ -34,12 +33,6 @@ function getExcerpt(post?: SitePost | null, limit = 130) {
 function categoryOf(post?: SitePost | null) {
   const content = post?.content && typeof post.content === 'object' ? (post.content as Record<string, unknown>) : {}
   return (typeof content.category === 'string' && content.category) || post?.tags?.[0] || ''
-}
-
-function hashStr(value: string) {
-  let h = 0
-  for (let i = 0; i < value.length; i += 1) h = (h * 31 + value.charCodeAt(i)) >>> 0
-  return h
 }
 
 const container = 'mx-auto w-full max-w-[var(--editable-container)] px-4 sm:px-6 lg:px-8'
@@ -76,7 +69,7 @@ function getDomain(post: SitePost) {
 }
 
 /* --------------------------------- Hero --------------------------------- */
-export function EditableHomeHero({ primaryTask, primaryRoute, posts, timeSections }: HomeSectionProps) {
+export function EditableHomeHero({ primaryRoute, posts, timeSections }: HomeSectionProps) {
   const pool = dedupePosts([...posts, ...timeSections.flatMap((s) => s.posts)])
   const heroImages = latestPostImages(pool)
   const heroTitle = pagesContent.home.hero.title?.join(' ') || `Discover the best of ${SITE_CONFIG.name}`
@@ -108,7 +101,7 @@ export function EditableHomeHero({ primaryTask, primaryRoute, posts, timeSection
 }
 
 /* ---------------------- Collections marquee band ----------------------- */
-export function EditableStoryRail({ primaryTask, primaryRoute, posts, timeSections }: HomeSectionProps) {
+export function EditableStoryRail({ posts, timeSections }: HomeSectionProps) {
   const pool = dedupePosts([...posts, ...timeSections.flatMap((s) => s.posts)])
   const categories = [...new Set(pool.map((p) => categoryOf(p)).filter(Boolean))].slice(0, 12)
   if (!categories.length) return null
@@ -146,7 +139,7 @@ function FeatureGrid() {
           <p className="mx-auto mt-4 max-w-2xl text-[var(--slot4-muted-text)]">Intelligent curation designed to simplify how you discover and organize resources.</p>
         </div>
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f, i) => (
+          {features.map((f) => (
             <div key={f.title} className="group rounded-xl border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] p-6 transition duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--slot4-accent-soft)] text-[var(--slot4-accent)]">
                 <f.icon className="h-5 w-5" />
