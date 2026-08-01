@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowUpRight, BriefcaseBusiness, ChevronDown, Download, FileText, Globe, MapPin, Phone, Search, Star, UserRound } from 'lucide-react'
+import { ArrowUpRight, BriefcaseBusiness, ChevronDown, Download, FileText, Globe, MapPin, Phone, Search, UserRound } from 'lucide-react'
 import { buildTaskMetadata } from '@/lib/seo'
 import { CATEGORY_OPTIONS, normalizeCategory } from '@/lib/categories'
 import { fetchPaginatedTaskPosts, buildPostUrl } from '@/lib/task-data'
@@ -194,13 +194,13 @@ function ArchivePostCard({ post, task, basePath, index }: { post: SitePost; task
   if (task === 'listing') return <ListingArchiveCard post={post} href={href} />
   if (task === 'classified') return <ClassifiedArchiveCard post={post} href={href} />
   if (task === 'image') return <ImageArchiveCard post={post} href={href} index={index} />
-  if (task === 'sbm') return <BookmarkArchiveCard post={post} href={href} index={index} />
+  if (task === 'sbm') return <BookmarkArchiveCard post={post} href={href} />
   if (task === 'pdf') return <PdfArchiveCard post={post} href={href} />
   if (task === 'profile') return <ProfileArchiveCard post={post} href={href} />
-  return <ArticleArchiveCard post={post} href={href} index={index} />
+  return <ArticleArchiveCard post={post} href={href} />
 }
 
-function ArticleArchiveCard({ post, href, index }: { post: SitePost; href: string; index: number }) {
+function ArticleArchiveCard({ post, href }: { post: SitePost; href: string }) {
   const image = getImage(post)
   const category = getCategory(post, 'Article')
   return (
@@ -275,7 +275,7 @@ function ImageArchiveCard({ post, href, index }: { post: SitePost; href: string;
   )
 }
 
-function BookmarkArchiveCard({ post, href, index }: { post: SitePost; href: string; index: number }) {
+function BookmarkArchiveCard({ post, href }: { post: SitePost; href: string }) {
   const website = getField(post, ['website', 'url', 'link'])
   const image = getImage(post)
   return (

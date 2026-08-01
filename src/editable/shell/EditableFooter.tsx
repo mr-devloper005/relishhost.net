@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
-import { globalContent, isUiHiddenTask } from '@/editable/content/global.content'
+import { globalContent } from '@/editable/content/global.content'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 import { CATEGORY_OPTIONS } from '@/lib/categories'
 
